@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "356914435971",
+    "project_id": "tmobiledev-844b5",
+    "storage_bucket": "tmobiledev-844b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356914435971:android:b8446094e709049f0648b6",
+        "android_client_info": {
+          "package_name": "com.tmobiledev.tmobiledev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356914435971-gkqg1r9suu169dlsh3q2n3bdlrf9hg1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_6T9AbO_qlJvsrpF5n5a8Z9Zbw4D2f1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356914435971-gkqg1r9suu169dlsh3q2n3bdlrf9hg1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
