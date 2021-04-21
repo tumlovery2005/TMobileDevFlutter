@@ -1,6 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:tmobiledev/bloc/UserMeBloc.dart';
+import 'package:tmobiledev/model/user/UserModel.dart';
+import 'package:tmobiledev/model/user/UserStatusModel.dart';
 import 'package:tmobiledev/utils/ImageProfileFailUtils.dart';
+import 'package:tmobiledev/utils/pref_manager.dart';
 
 class ProfilePage extends StatefulWidget {
 
@@ -10,6 +15,17 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   double shortTestside;
+  double showOpacity = 0.0;
+  bool loading = false;
+
+  UserModel userModel = new UserModel();
+
+  @override
+  void initState() {
+    Prefs.load();
+    _getUserMe(Prefs.getString(Prefs.PREF_AUTHEN));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +43,27 @@ class ProfilePageState extends State<ProfilePage> {
         centerTitle: true,
         backgroundColor: Colors.lightBlue,
       ),
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          margin: EdgeInsets.all(shortTestside / 50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              getIconProfile(""),
-            ],
+      body: ModalProgressHUD(
+        child: SafeArea(
+          child: Opacity(
+            child: Container(
+              width: double.infinity,
+              margin: EdgeInsets.all(shortTestside / 50),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  getIconProfile(""),
+                  _text("${userModel.checkin_user_name}", Colors.black),
+                  _text("เบอร์โทรศัพท์ : ${userModel.checkin_user_telephone}", Colors.black),
+                  _text("อีเมล :  : ${userModel.checkin_user_email}", Colors.black),
+                  _text("ที่อยู่ :  : ${userModel.checkin_user_address}", Colors.black),
+                ],
+              ),
+            ),
+            opacity: showOpacity,
           ),
         ),
+        inAsyncCall: loading,
       ),
     );
   }
@@ -59,5 +85,55 @@ class ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Widget _text(String value, Color color){
+    return Flexible(
+      child: Container(
+        margin: EdgeInsets.all(shortTestside / 20),
+        child: Text(value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: color, fontSize: shortTestside / 20)
+        ),
+      ),
+    );
+  }
+
+  _getUserMe(String authen){
+    setLoading(true);
+    Future<UserStatusModel> userme = userMeBloc.getUserMe(authen);
+    userme.then((value) => {
+      if(value.error == ""){
+        print("data ${value.data}"),
+        if(value.status){
+          setUserModel(value.data),
+          setShowOpacity(1.0),
+        } else {
+
+        }
+      } else {
+        print('userme error : ${value.error}'),
+      },
+      setLoading(false),
+    });
+  }
+
+  setUserModel(UserModel _userModel){
+    setState(() {
+      userModel = _userModel;
+    });
+  }
+
+  setLoading(bool _loading){
+    setState(() {
+      loading = _loading;
+    });
+  }
+
+  setShowOpacity(double _showOpacity){
+    setState(() {
+      showOpacity = _showOpacity;
+    });
   }
 }

@@ -1,10 +1,10 @@
 class UserModel {
-    String checkin_user_telephone;
-    String checkin_user_address;
-    String checkin_user_birth_date;
-    String checkin_user_email;
-    String checkin_user_name;
-    String checkin_user_photo;
+    String checkin_user_telephone = "";
+    String checkin_user_address = "";
+    String checkin_user_birth_date = "";
+    String checkin_user_email = "";
+    String checkin_user_name = "";
+    String checkin_user_photo = "";
 
     UserModel({this.checkin_user_telephone, this.checkin_user_address,
         this.checkin_user_birth_date, this.checkin_user_email, this.checkin_user_name,

@@ -56,34 +56,37 @@ class MainAppPageState extends State<MainAppPage> {
         backgroundColor: Colors.lightBlue,
       ),
       drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: getDrawerHeader(),
-              decoration: BoxDecoration(
-                color: Colors.lightBlue,
+        child: Container(
+          width: double.infinity,
+          child: ListView(
+            children: <Widget>[
+              DrawerHeader(
+                child: getDrawerHeader(),
+                decoration: BoxDecoration(
+                  color: Colors.lightBlue,
+                ),
               ),
-            ),
-            InkResponse(
-              child: getItemMenuList('โปรไฟล์'),
-              onTap: () => {
-                Navigator.push(context, EnterExitRoute(enterPage: ProfilePage())),
-              },
-            ),
-            InkResponse(
-              child: getItemMenuList("Generate token"),
-              onTap: () => {
-                Navigator.push(context, EnterExitRoute(enterPage: TokenPage())),
-              },
-            ),
-            InkResponse(
-              child: getItemMenuList('ออกจากระบบ'),
-              onTap: () => {
-                _dialogLogOut()
-              },
-            ),
-          ],
-        ),
+              InkResponse(
+                child: getItemMenuList('โปรไฟล์'),
+                onTap: () => {
+                  Navigator.push(context, EnterExitRoute(enterPage: ProfilePage())),
+                },
+              ),
+              InkResponse(
+                child: getItemMenuList("Generate token"),
+                onTap: () => {
+                  Navigator.push(context, EnterExitRoute(enterPage: TokenPage())),
+                },
+              ),
+              InkResponse(
+                child: getItemMenuList('ออกจากระบบ'),
+                onTap: () => {
+                  _dialogLogOut()
+                },
+              ),
+            ],
+          ),
+        )
       ),
       body: IndexedStack(
         index: bottomSelectedIndex,
@@ -112,11 +115,11 @@ class MainAppPageState extends State<MainAppPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               getIconProfile(userMe.checkin_user_photo),
-              getWidgetTextName(),
+              _textName(userMe.checkin_user_name),
             ],
           ),
-          getWidgetText('Tel. :', userMe.checkin_user_telephone, Colors.white),
-          getWidgetText('E-mail :', userMe.checkin_user_email, Colors.white),
+          getWidgetText('เบอร์โทรศัพท์ : ', userMe.checkin_user_telephone, Colors.white),
+          getWidgetText('อีเมล : ', userMe.checkin_user_email, Colors.white),
         ],
       ),
     );
@@ -163,18 +166,14 @@ class MainAppPageState extends State<MainAppPage> {
   }
 
   Widget getWidgetText(String title, String value, Color color){
-    if(value != ""){
-      return Row(
+    return Container(
+      child: Row(
         children: <Widget>[
           _text(title, color),
-          Expanded(
-              child: _text(value, color),
-          )
+          Expanded(child: _text(value, color)),
         ],
-      );
-    } else {
-      return _textName('${title} -');
-    }
+      ),
+    );
   }
 
   Widget _textName(String name){
@@ -187,18 +186,15 @@ class MainAppPageState extends State<MainAppPage> {
   }
 
   Widget _text(String value, Color color){
-    return Flexible(
-      child: Container(
-          margin: EdgeInsets.only(
-            right: shortTestside / 50,
-            top: shortTestside / 50,
-          ),
-          child: Text(value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: color)
-          ),
-        ),
+    return Container(
+      margin: EdgeInsets.only(
+        top: shortTestside / 25,
+      ),
+      child: Text(value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: color)
+      ),
     );
   }
 
