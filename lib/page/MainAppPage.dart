@@ -33,7 +33,7 @@ class MainAppPageState extends State<MainAppPage> {
   }
 
   final List<Widget> _pageList = [
-    TokenPage(),
+    TestColorsPage(title: "Page 1"),
     TestColorsPage(title: "Page 2"),
     TestColorsPage(title: "Page 3"),
   ];
@@ -64,35 +64,23 @@ class MainAppPageState extends State<MainAppPage> {
                 color: Colors.lightBlue,
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(
-                top: shortTestside / 25,
-                left: shortTestside / 25,
-                right: shortTestside / 25,
-              ),
-              child: InkResponse(
-                child: Text('โปรไฟล์', style: TextStyle(color: Colors.black,
-                    fontSize: shortTestside / 20, fontWeight: FontWeight.bold)
-                ),
-                onTap: () => {
-                  Navigator.push(context, EnterExitRoute(enterPage: ProfilePage())),
-                },
-              )
+            InkResponse(
+              child: getItemMenuList('โปรไฟล์'),
+              onTap: () => {
+                Navigator.push(context, EnterExitRoute(enterPage: ProfilePage())),
+              },
             ),
-            Container(
-                padding: EdgeInsets.only(
-                  top: shortTestside / 25,
-                  left: shortTestside / 20,
-                  right: shortTestside / 20,
-                ),
-                child: InkResponse(
-                  child: Text('ออกจากระบบ', style: TextStyle(color: Colors.black,
-                      fontSize: shortTestside / 20, fontWeight: FontWeight.bold)
-                  ),
-                  onTap: () => {
-                    _dialogLogOut()
-                  },
-                )
+            InkResponse(
+              child: getItemMenuList("Generate token"),
+              onTap: () => {
+                Navigator.push(context, EnterExitRoute(enterPage: TokenPage())),
+              },
+            ),
+            InkResponse(
+              child: getItemMenuList('ออกจากระบบ'),
+              onTap: () => {
+                _dialogLogOut()
+              },
             ),
           ],
         ),
@@ -149,6 +137,19 @@ class MainAppPageState extends State<MainAppPage> {
             fit: BoxFit.cover,
           ) : ImageProfileFailUtils().imageFail(shortTestside / 6),
         ),
+      ),
+    );
+  }
+
+  Widget getItemMenuList(String itemMenu){
+    return Container(
+      padding: EdgeInsets.only(
+        top: shortTestside / 25,
+        left: shortTestside / 25,
+        right: shortTestside / 25,
+      ),
+      child: Text(itemMenu, style: TextStyle(color: Colors.black,
+          fontSize: shortTestside / 20, fontWeight: FontWeight.bold)
       ),
     );
   }
