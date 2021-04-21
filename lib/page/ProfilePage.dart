@@ -48,15 +48,15 @@ class ProfilePageState extends State<ProfilePage> {
           child: Opacity(
             child: Container(
               width: double.infinity,
-              margin: EdgeInsets.all(shortTestside / 50),
+              margin: EdgeInsets.all(shortTestside / 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   getIconProfile(""),
-                  _text("${userModel.checkin_user_name}", Colors.black),
-                  _text("เบอร์โทรศัพท์ : ${userModel.checkin_user_telephone}", Colors.black),
-                  _text("อีเมล :  : ${userModel.checkin_user_email}", Colors.black),
-                  _text("ที่อยู่ :  : ${userModel.checkin_user_address}", Colors.black),
+                  _text("${userModel.checkin_user_name}",Alignment.center, Colors.black),
+                  _text("เบอร์โทรศัพท์ : ${userModel.checkin_user_telephone}", Alignment.center, Colors.black),
+                  _text("อีเมล : ${userModel.checkin_user_email}",  Alignment.center, Colors.black),
+                  _text("ที่อยู่ : ${userModel.checkin_user_address}",Alignment.topLeft, Colors.black),
                 ],
               ),
             ),
@@ -87,15 +87,13 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _text(String value, Color color){
-    return Flexible(
-      child: Container(
-        margin: EdgeInsets.all(shortTestside / 20),
-        child: Text(value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: color, fontSize: shortTestside / 20)
-        ),
+  Widget _text(String value, Alignment alignment, Color color){
+    return Container(
+      width: double.infinity,
+      alignment: alignment,
+      margin: EdgeInsets.all(shortTestside / 20),
+      child: Text(value,
+          style: TextStyle(color: color, fontSize: shortTestside / 20)
       ),
     );
   }
