@@ -60,7 +60,9 @@ class TokenPageState extends State<TokenPage> {
                             return getTextToken();
                           }
                         }
-                        return Text('Time : ${time.sec} sec');
+                        return Text('Time : ${time.min} min ${time.sec} sec',
+                          style: TextStyle(fontSize: shortTestside / 10),
+                        );
                       },
                     ),
                   ],
@@ -87,7 +89,9 @@ class TokenPageState extends State<TokenPage> {
   }
 
   Widget getTextToken(){
-    return Text('Token : ${num1}${num2}${num3}${num4}${num5}${num6}');
+    return Text('Token : ${num1}${num2}${num3}${num4}${num5}${num6}',
+        style: TextStyle(fontSize: shortTestside / 10),
+    );
   }
 
   Widget layoutNumberToken(){
@@ -137,7 +141,7 @@ class TokenPageState extends State<TokenPage> {
 
   void bottomTapped(int index) {
     if(index == 0){
-      endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60;
+      endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 180;
       controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
     } else if(index == 1) {
       if(controller != null){

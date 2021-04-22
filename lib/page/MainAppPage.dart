@@ -22,6 +22,7 @@ class MainAppPage extends StatefulWidget {
 
 class MainAppPageState extends State<MainAppPage> {
   double shortTestside;
+  double shortWidthsize;
   int bottomSelectedIndex = 0;
   UserModel userMe = null;
 
@@ -46,6 +47,16 @@ class MainAppPageState extends State<MainAppPage> {
   @override
   Widget build(BuildContext context) {
     shortTestside = MediaQuery.of(context).size.shortestSide;
+    shortWidthsize = MediaQuery.of(context).size.width;
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    if(isPortrait){
+      return _isPortrait();
+    } else {
+      return _isLandscape();
+    }
+  }
+
+  Widget _isPortrait(){
     return Scaffold(
       appBar: AppBar(
         elevation: 3.0,
@@ -55,7 +66,42 @@ class MainAppPageState extends State<MainAppPage> {
         centerTitle: true,
         backgroundColor: Colors.lightBlue,
       ),
-      drawer: Drawer(
+      drawer: _DrawerLayout(),
+      body: IndexedStack(
+        index: bottomSelectedIndex,
+        children: [..._pageList],
+      ),
+      bottomNavigationBar: _buildNavigationBar(),
+    );
+  }
+
+  Widget _isLandscape(){
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: (shortWidthsize / 10) * 3,
+              child: _DrawerLayout(),
+            ),
+            Expanded(
+              child: Scaffold(
+                body: IndexedStack(
+                  index: bottomSelectedIndex,
+                  children: [..._pageList],
+                ),
+                bottomNavigationBar: _buildNavigationBar(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _DrawerLayout(){
+    return Drawer(
         child: Container(
           width: double.infinity,
           child: ListView(
@@ -87,21 +133,6 @@ class MainAppPageState extends State<MainAppPage> {
             ],
           ),
         )
-      ),
-      body: IndexedStack(
-        index: bottomSelectedIndex,
-        children: [..._pageList],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.green,
-        selectedItemColor: Colors.lightBlue,
-        unselectedItemColor: Colors.white,
-        currentIndex: bottomSelectedIndex,
-        items: buildBottomNavBarItems(),
-        onTap: (index) {
-          pageChanged(index);
-        },
-      ),
     );
   }
 
@@ -122,6 +153,19 @@ class MainAppPageState extends State<MainAppPage> {
           getWidgetText('อีเมล : ', userMe.checkin_user_email, Colors.white),
         ],
       ),
+    );
+  }
+
+  Widget _buildNavigationBar(){
+    return BottomNavigationBar(
+      backgroundColor: Colors.green,
+      selectedItemColor: Colors.lightBlue,
+      unselectedItemColor: Colors.white,
+      currentIndex: bottomSelectedIndex,
+      items: buildBottomNavBarItems(),
+      onTap: (index) {
+        pageChanged(index);
+      },
     );
   }
 
