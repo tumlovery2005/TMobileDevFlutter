@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   double shortTestside;
+  double shortWidthsize;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool showPassword = true;
@@ -32,6 +33,16 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     shortTestside = MediaQuery.of(context).size.shortestSide;
+    shortWidthsize = MediaQuery.of(context).size.width;
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    if(isPortrait){
+      return _isPortrait();
+    } else {
+      return _isLandscape();
+    }
+  }
+
+  Widget _isPortrait(){
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -43,7 +54,6 @@ class LoginPageState extends State<LoginPage> {
         body: ModalProgressHUD(
           child: Container(
             width: double.infinity,
-            height: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -54,26 +64,85 @@ class LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            child: Center(
-              child: Container(
-                width: double.infinity,
-                margin: EdgeInsets.all(shortTestside / 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('TmobileDev', style: TextStyle(color: Colors.white,
-                        fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Center(
+                    child: Image(
+                      image: AssetImage('assets/title_image.png'),
+                      width: shortWidthsize / 2, color: Colors.white,
                     ),
-                    _boxInputEmail(),
-                    _boxInputPassword(),
-                    _buttonLogin(),
-                  ],
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: _layoutLogin(),
+                ),
+              ],
             ),
           ),
           inAsyncCall: loading,
+        ),
+      ),
+    );
+  }
+
+  Widget _isLandscape(){
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.lightBlue,
+              Colors.green,
+            ],
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: (shortWidthsize / 2),
+              height: double.infinity,
+              child: Center(
+                child: Image(
+                  image: AssetImage('assets/title_image.png'),
+                  width: shortWidthsize / 4, color: Colors.white,
+                ),
+              ),
+            ),
+            Expanded(
+              child: _layoutLogin(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _layoutLogin(){
+    return Container(
+      child: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.all(shortTestside / 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('TmobileDev', style: TextStyle(color: Colors.white,
+                    fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                ),
+                _boxInputEmail(),
+                _boxInputPassword(),
+                _buttonLogin(),
+                _ButtonRegister(),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -187,10 +256,28 @@ class LoginPageState extends State<LoginPage> {
           _setLoading(true),
           _LoginRequest(),
         },
-        child: Text('Login', style: TextStyle(color: Colors.white),),
+        child: Text('Login', style: TextStyle(color: Colors.white)),
         clipBehavior: Clip.antiAlias,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.lightBlue)
+        ),
+      ),
+    );
+  }
+
+  Widget _ButtonRegister(){
+    return Container(
+      margin: EdgeInsets.all(shortTestside / 100),
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () => {
+          _setLoading(true),
+          _LoginRequest(),
+        },
+        child: Text('Register', style: TextStyle(color: Colors.white)),
+        clipBehavior: Clip.antiAlias,
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.lightBlue)
         ),
       ),
     );
