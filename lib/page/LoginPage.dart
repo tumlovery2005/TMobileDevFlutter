@@ -7,6 +7,7 @@ import 'package:tmobiledev/bloc/UserMeBloc.dart';
 import 'package:tmobiledev/model/StatusModel.dart';
 import 'package:tmobiledev/model/user/UserStatusModel.dart';
 import 'package:tmobiledev/page/MainAppPage.dart';
+import 'package:tmobiledev/page/RegisterPage.dart';
 import 'package:tmobiledev/utils/EnterExitRoute.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
 
@@ -67,11 +68,19 @@ class LoginPageState extends State<LoginPage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: Center(
-                    child: Image(
-                      image: AssetImage('assets/title_image.png'),
-                      width: shortWidthsize / 2, color: Colors.white,
-                    ),
+                  child: Column(
+                    mainAxisAlignment:  MainAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                        child: Image(
+                          image: AssetImage('assets/title_image.png'),
+                          width: shortWidthsize / 2, color: Colors.white,
+                        ),
+                      ),
+                      Text('TmobileDev', style: TextStyle(color: Colors.white,
+                          fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -106,11 +115,19 @@ class LoginPageState extends State<LoginPage> {
             Container(
               width: (shortWidthsize / 2),
               height: double.infinity,
-              child: Center(
-                child: Image(
-                  image: AssetImage('assets/title_image.png'),
-                  width: shortWidthsize / 4, color: Colors.white,
-                ),
+              child: Column(
+                mainAxisAlignment:  MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Image(
+                      image: AssetImage('assets/title_image.png'),
+                      width: shortWidthsize / 4, color: Colors.white,
+                    ),
+                  ),
+                  Text('TmobileDev', style: TextStyle(color: Colors.white,
+                      fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -133,7 +150,7 @@ class LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('TmobileDev', style: TextStyle(color: Colors.white,
+                Text('Login', style: TextStyle(color: Colors.white,
                     fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
                 ),
                 _boxInputEmail(),
@@ -271,8 +288,7 @@ class LoginPageState extends State<LoginPage> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () => {
-          _setLoading(true),
-          _LoginRequest(),
+          _nextRegisterPage(),
         },
         child: Text('Register', style: TextStyle(color: Colors.white)),
         clipBehavior: Clip.antiAlias,
@@ -339,6 +355,10 @@ class LoginPageState extends State<LoginPage> {
     setState(() {
       showPassword = _isShow;
     });
+  }
+
+  _nextRegisterPage() {
+    Navigator.push(context, EnterExitRoute(enterPage: RegisterPage()));
   }
 
   _nextMainAppPage() {
