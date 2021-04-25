@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:abhi_flutter_alertdialog/abhi_flutter_alertdialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
 import 'package:tmobiledev/page/LoginPage.dart';
 import 'package:tmobiledev/page/ProfilePage.dart';
 import 'package:tmobiledev/utils/DateTimeUtils.dart';
+import 'package:tmobiledev/utils/DialogUtils.dart';
 import 'package:tmobiledev/utils/EnterExitRoute.dart';
 import 'package:tmobiledev/utils/ImageProfileFailUtils.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
@@ -278,34 +278,17 @@ class MainAppPageState extends State<MainAppPage> {
   }
 
   _dialogLogOut(){
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog1(
-        context: context,
-        title: 'คำเตือน',
-        content: 'คุณต้องการออกจากระบบหรือไม่',
-        action1: 'ใช่',
-        action2: 'ไม่',
-        function1: () => _LogOut(),
-        function2: () => functionB(context),
-        div: true,
-        txtAlign: 2,
-        radius: shortTestside / 80,
-        boxColor: Colors.lightBlue,
-        btnTxtColor: Colors.white,
-        txtColor: Colors.white,
-      ),
-    );
+    DialogUtils().showDialogYesNo(context, 'คำเตือน', 'คุณต้องการออกจากระบบหรือไม่', _LogOut);
   }
 
   functionB(BuildContext context) {
     Navigator.pop(context);
   }
 
-  _LogOut(){
+  void _LogOut(BuildContext _context){
     Prefs.clear();
-    Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pop(_context);
+    Navigator.push(_context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   void bottomTapped(int index) {

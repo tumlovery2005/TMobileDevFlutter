@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:tmobiledev/utils/DialogUtils.dart';
 
 class RegisterPage extends StatefulWidget {
 
@@ -19,6 +20,10 @@ class RegisterPageState extends State<RegisterPage> {
   bool showPassword = true;
   bool showConfirmPassword = true;
   bool loading = false;
+
+  List<String> listValue = [
+    "อีเมล์", "รหัสผ่าน", "ยืนยันรหัสผ่าน", "ชื่อจริง", "นามสกุล", "เบอร์โทรศัพท์"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -459,7 +464,7 @@ class RegisterPageState extends State<RegisterPage> {
       child: ElevatedButton(
         onPressed: () => {
           // _setLoading(true),
-          // _LoginRequest(),
+          _registerValidate(),
         },
         child: Text('Register', style: TextStyle(color: Colors.white)),
         clipBehavior: Clip.antiAlias,
@@ -468,6 +473,40 @@ class RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  _registerValidate(){
+    List<String> inputValue = [];
+    List<String> checkValue = [];
+    inputValue.add(_emailController.text.toString());
+    inputValue.add(_passwordController.text.toString());
+    inputValue.add(_confirmPasswordController.text.toString());
+    inputValue.add(_firstNameController.text.toString());
+    inputValue.add(_lasttNameController.text.toString());
+    inputValue.add(_telephoneController.text.toString());
+    for(int i = 0;i < listValue.length;i++){
+      if(inputValue[i] == ""){
+        checkValue.add(listValue[i]);
+      }
+    }
+
+    String message = "คุณยังไม่ได้กรอกข้อมูล\n";
+    for(int i = 0;i < checkValue.length;i++){
+      message += '\n - ${checkValue[i]}';
+    }
+    message += "\n\nกรุณากรอกข้อมูลให้ครบทุกช่อง";
+
+    if(checkValue.length > 0){
+      _showDialog(message);
+    }
+  }
+
+  _showDialog(String message){
+    DialogUtils().showDialogMessage(context, "คำเตือน", message);
+  }
+
+  functionClose(BuildContext context) {
+    Navigator.pop(context);
   }
 
   _setLoading(bool _loading){
