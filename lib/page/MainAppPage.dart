@@ -7,6 +7,7 @@ import 'package:tmobiledev/model/user/UserModel.dart';
 import 'package:tmobiledev/page/LocationStampPage.dart';
 import 'package:tmobiledev/page/LoginPage.dart';
 import 'package:tmobiledev/page/ProfilePage.dart';
+import 'package:tmobiledev/utils/CustomView.dart';
 import 'package:tmobiledev/utils/DateTimeUtils.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
 import 'package:tmobiledev/utils/EnterExitRoute.dart';
@@ -118,24 +119,10 @@ class MainAppPageState extends State<MainAppPage> {
                   color: Colors.lightBlue,
                 ),
               ),
-              InkResponse(
-                child: getItemMenuList('โปรไฟล์'),
-                onTap: () => {
-                  Navigator.push(context, EnterExitRoute(enterPage: ProfilePage())),
-                },
-              ),
-              InkResponse(
-                child: getItemMenuList("Generate token"),
-                onTap: () => {
-                  Navigator.push(context, EnterExitRoute(enterPage: TokenPage())),
-                },
-              ),
-              InkResponse(
-                child: getItemMenuList('ออกจากระบบ'),
-                onTap: () => {
-                  _dialogLogOut()
-                },
-              ),
+              CustomView().buttonCustomTextIcon(Icons.person, "โปรไฟล์",
+                  shortWidthsize / 30, _nextProfilePage),
+              CustomView().buttonCustomTextIcon(Icons.logout, "ออกจากระบบ",
+                  shortWidthsize / 30, _dialogLogOut),
             ],
           ),
         )
@@ -287,8 +274,8 @@ class MainAppPageState extends State<MainAppPage> {
     DialogUtils().showDialogYesNo(context, 'คำเตือน', 'คุณต้องการออกจากระบบหรือไม่', _LogOut);
   }
 
-  functionB(BuildContext context) {
-    Navigator.pop(context);
+  _nextProfilePage(){
+    Navigator.push(context, EnterExitRoute(enterPage: ProfilePage()));
   }
 
   _LogOut(BuildContext _context){
