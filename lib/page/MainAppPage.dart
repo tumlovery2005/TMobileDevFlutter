@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
+import 'package:tmobiledev/page/LocationStampPage.dart';
 import 'package:tmobiledev/page/LoginPage.dart';
 import 'package:tmobiledev/page/ProfilePage.dart';
 import 'package:tmobiledev/utils/DateTimeUtils.dart';
@@ -11,6 +12,8 @@ import 'package:tmobiledev/utils/EnterExitRoute.dart';
 import 'package:tmobiledev/utils/ImageProfileFailUtils.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
 
+import 'ChatPage.dart';
+import 'LocationStampPage.dart';
 import 'TestColorsPage.dart';
 import 'TokenPage.dart';
 
@@ -34,7 +37,7 @@ class MainAppPageState extends State<MainAppPage> {
   }
 
   final List<Widget> _pageList = [
-    TestColorsPage(title: "Page 1"),
+    LocationStampPage(),
     TestColorsPage(title: "Page 2"),
     TestColorsPage(title: "Page 3"),
   ];

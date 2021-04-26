@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
 
+import '../bloc/RegisterBloc.dart';
+import '../model/StatusModel.dart';
+
 class RegisterPage extends StatefulWidget {
 
   @override
@@ -498,6 +501,13 @@ class RegisterPageState extends State<RegisterPage> {
 
     if(checkValue.length > 0){
       _showDialog(message);
+    } else {
+      if(inputValue[1] != inputValue[2]){
+        _showDialog("Password และ Confirm password ไม่ตรงกัน");
+      } else {
+        _register(inputValue[0], inputValue[1], '${inputValue[3]}  ${inputValue[4]}',
+            "", inputValue[5], "");
+      }
     }
   }
 
@@ -507,6 +517,26 @@ class RegisterPageState extends State<RegisterPage> {
 
   functionClose(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  _register(String email, String password, String name, String birth_date,
+      String telephone, String address){
+    _setLoading(true);
+    Future<StatusModel> register = registerBloc.register(email, password, name,
+        birth_date, telephone, address);
+    register.then((value) => {
+      if(value.error == ""){
+        if(value.status){
+          functionClose(context),
+          _showDialog(value.messge),
+        } else {
+          _showDialog(value.messge),
+        }
+      } else {
+        _showDialog(value.error)
+      },
+      _setLoading(false),
+    });
   }
 
   _setLoading(bool _loading){

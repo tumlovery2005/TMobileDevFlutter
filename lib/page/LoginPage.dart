@@ -52,44 +52,49 @@ class LoginPageState extends State<LoginPage> {
         }
       },
       child: Scaffold(
-        body: ModalProgressHUD(
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.lightBlue,
-                  Colors.green,
-                ],
+        body: Stack(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.lightBlue,
+                    Colors.green,
+                  ],
+                ),
               ),
             ),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment:  MainAxisAlignment.center,
-                    children: <Widget>[
-                      Center(
-                        child: Image(
-                          image: AssetImage('assets/title_image.png'),
-                          width: shortWidthsize / 2, color: Colors.white,
-                        ),
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              padding: EdgeInsets.only(top: shortWidthsize / 5),
+              child: ModalProgressHUD(
+                child: Container(
+                    width: double.infinity,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          Center(
+                            child: Image(
+                              image: AssetImage('assets/title_image.png'),
+                              width: shortWidthsize / 2, color: Colors.white,
+                            ),
+                          ),
+                          Text('TmobileDev', style: TextStyle(color: Colors.white,
+                              fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                          ),
+                          _layoutLogin()
+                        ],
                       ),
-                      Text('TmobileDev', style: TextStyle(color: Colors.white,
-                          fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
-                      ),
-                    ],
-                  ),
+                    )
                 ),
-                Expanded(
-                  child: _layoutLogin(),
-                ),
-              ],
+                inAsyncCall: loading,
+              ),
             ),
-          ),
-          inAsyncCall: loading,
+          ],
         ),
       ),
     );
