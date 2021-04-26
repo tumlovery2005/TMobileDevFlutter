@@ -89,7 +89,7 @@ class MainAppPageState extends State<MainAppPage> {
         child: Row(
           children: <Widget>[
             Container(
-              width: (shortWidthsize / 10) * 3,
+              width: (shortWidthsize / 10) * 4,
               child: _DrawerLayout(),
             ),
             Expanded(
@@ -139,7 +139,9 @@ class MainAppPageState extends State<MainAppPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               getIconProfile(userMe.checkin_user_photo),
-              _textName(userMe.checkin_user_name),
+              Expanded(
+                child: _textName(userMe.checkin_user_name),
+              ),
             ],
           ),
           getWidgetText('เบอร์โทรศัพท์ : ', userMe.checkin_user_telephone, Colors.white),
@@ -217,7 +219,10 @@ class MainAppPageState extends State<MainAppPage> {
     return Container(
       margin: EdgeInsets.all(shortTestside / 50),
       child: Text(name, style: TextStyle(fontSize: shortTestside / 20,
-          color: Colors.white)
+          color: Colors.white,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
