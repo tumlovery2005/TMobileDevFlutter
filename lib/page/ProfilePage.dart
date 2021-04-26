@@ -56,6 +56,7 @@ class ProfilePageState extends State<ProfilePage> {
                   _text("${userModel.checkin_user_name}",Alignment.center, Colors.black),
                   _text("เบอร์โทรศัพท์ : ${userModel.checkin_user_telephone}", Alignment.center, Colors.black),
                   _text("อีเมล : ${userModel.checkin_user_email}",  Alignment.center, Colors.black),
+                  _text("วันเดือนปี เกิด : ${userModel.checkin_user_birth_date}",  Alignment.center, Colors.black),
                   _text("ที่อยู่ : ${userModel.checkin_user_address}",Alignment.topLeft, Colors.black),
                 ],
               ),

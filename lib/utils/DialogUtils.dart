@@ -3,6 +3,8 @@ import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 
 class DialogUtils {
 
+
+
   showDialogMessage(BuildContext context, String title, String message){
     showDialog<void>(
       context: context,
@@ -48,8 +50,8 @@ class DialogUtils {
               child: Text('ใช่'),
               actionType: ActionType.Preferred,
               onPressed: () {
-                function(context);
                 Navigator.of(context).pop();
+                function(context);
               },
             ),
             PlatformDialogAction(

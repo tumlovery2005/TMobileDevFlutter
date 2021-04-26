@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
 import 'package:tmobiledev/page/LocationStampPage.dart';
 import 'package:tmobiledev/page/LoginPage.dart';
@@ -12,8 +13,10 @@ import 'package:tmobiledev/utils/EnterExitRoute.dart';
 import 'package:tmobiledev/utils/ImageProfileFailUtils.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
 
+import '../utils/DialogUtils.dart';
 import 'ChatPage.dart';
 import 'LocationStampPage.dart';
+import 'LoginPage.dart';
 import 'TestColorsPage.dart';
 import 'TokenPage.dart';
 
@@ -288,10 +291,10 @@ class MainAppPageState extends State<MainAppPage> {
     Navigator.pop(context);
   }
 
-  void _LogOut(BuildContext _context){
+  _LogOut(BuildContext _context){
     Prefs.clear();
-    Navigator.pop(_context);
-    Navigator.push(_context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pop(context);
+    Navigator.push(context, EnterExitRoute(enterPage: LoginPage()));
   }
 
   void bottomTapped(int index) {
