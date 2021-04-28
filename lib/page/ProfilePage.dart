@@ -5,6 +5,7 @@ import 'package:tmobiledev/bloc/UserMeBloc.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
 import 'package:tmobiledev/model/user/UserStatusModel.dart';
 import 'package:tmobiledev/utils/ImageProfileFailUtils.dart';
+import 'package:tmobiledev/utils/StringUtils.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -30,6 +31,10 @@ class ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     shortTestside = MediaQuery.of(context).size.shortestSide;
+    return _isPortrait();
+  }
+
+  Widget _isPortrait(){
     return Scaffold(
       appBar: AppBar(
         leading: new IconButton(
@@ -47,24 +52,37 @@ class ProfilePageState extends State<ProfilePage> {
         child: SafeArea(
           child: Opacity(
             child: Container(
-              width: double.infinity,
-              margin: EdgeInsets.all(shortTestside / 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  getIconProfile(""),
-                  _text("${userModel.checkin_user_name}",Alignment.center, Colors.black),
-                  _text("เบอร์โทรศัพท์ : ${userModel.checkin_user_telephone}", Alignment.center, Colors.black),
-                  _text("อีเมล : ${userModel.checkin_user_email}",  Alignment.center, Colors.black),
-                  _text("วันเดือนปี เกิด : ${userModel.checkin_user_birth_date}",  Alignment.center, Colors.black),
-                  _text("ที่อยู่ : ${userModel.checkin_user_address}",Alignment.topLeft, Colors.black),
-                ],
-              ),
+                width: double.infinity,
+                margin: EdgeInsets.all(shortTestside / 25),
+                child: Card(
+                  elevation: 2.0,
+                  shadowColor: Colors.lightBlue,
+                  child: Container(
+                    padding: EdgeInsets.all(shortTestside / 25),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            getIconProfile(userModel.checkin_user_photo),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )
             ),
             opacity: showOpacity,
           ),
         ),
         inAsyncCall: loading,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        label: const Text('แก้ไขโปรไฟล์'),
+        icon: const Icon(Icons.edit),
+        backgroundColor: Colors.lightBlue,
       ),
     );
   }

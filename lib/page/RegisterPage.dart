@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
 
@@ -20,12 +22,15 @@ class RegisterPageState extends State<RegisterPage> {
   final _firstNameController = TextEditingController();
   final _lasttNameController = TextEditingController();
   final _telephoneController = TextEditingController();
+  final _textBirthdateController = TextEditingController();
   bool showPassword = true;
   bool showConfirmPassword = true;
   bool loading = false;
+  String birthDate = "";
+  String showBirthDate = "";
 
   List<String> listValue = [
-    "อีเมล์", "รหัสผ่าน", "ยืนยันรหัสผ่าน", "ชื่อจริง", "นามสกุล", "เบอร์โทรศัพท์"
+    "อีเมล์", "รหัสผ่าน", "ยืนยันรหัสผ่าน", "ชื่อจริง", "นามสกุล", "วันเดือนปีเกิด", "เบอร์โทรศัพท์"
   ];
 
   @override
@@ -101,6 +106,7 @@ class RegisterPageState extends State<RegisterPage> {
                   _boxInputFirstname(),
                   _boxInputLastname(),
                   _boxTelephone(),
+                  _boxBirthdate(),
                   _buttonRegister(),
                 ],
               ),
@@ -184,6 +190,7 @@ class RegisterPageState extends State<RegisterPage> {
                 _boxInputFirstname(),
                 _boxInputLastname(),
                 _boxTelephone(),
+                _boxBirthdate(),
                 _buttonRegister(),
               ],
             ),
@@ -460,6 +467,70 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget _boxBirthdate(){
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(top: shortTestside / 100),
+      child: Card(
+        shadowColor: Colors.lightBlue,
+        elevation: 3.0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusDirectional.circular(shortTestside / 10)),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(shortTestside / 100),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(shortTestside / 100),
+                    child: Icon(Icons.calendar_today, color: Colors.lightBlue),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(left: shortTestside / 100),
+                      child: TextField(
+                        controller: _textBirthdateController,
+                        decoration: InputDecoration(
+                          hintText: "ฺBirth date",
+                          border: InputBorder.none,
+                        ),
+                        keyboardType: TextInputType.number,
+                        maxLines: 1,
+                        readOnly: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            InkResponse(
+              child: Container(
+                padding: EdgeInsets.all(shortTestside / 100),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(shortTestside / 100),
+                      child: Icon(Icons.calendar_today, color: Colors.transparent),
+                    ),
+                    Expanded(
+                      child: Container(
+
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              onTap: () => _selectDate(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buttonRegister(){
     return Container(
       margin: EdgeInsets.all(shortTestside / 100),
@@ -478,6 +549,34 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  _selectDate() async {
+    final DateTime pickedDate = await showRoundedDatePicker(
+        context: context,
+        locale: Locale("th", "TH"),
+        era: EraMode.BUDDHIST_YEAR,
+        borderRadius: shortTestside / 60,
+        height: shortTestside / 1.5,
+        theme: ThemeData(
+          primarySwatch: Colors.pink,
+          accentColor: Colors.pinkAccent,
+          textTheme: TextTheme(
+            body1: TextStyle(color: Color.fromRGBO(88, 133, 217, 1)),
+            caption: TextStyle(color: Color.fromRGBO(88, 133, 217, 1),),
+          ),
+        ),
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2060)
+    );
+    if (pickedDate != null){
+      _textBirthdateController.text = _formatDateTimetoString(pickedDate);
+      setState(() {
+        showBirthDate = _formatDateTimetoString(pickedDate);
+         birthDate = _formatDateTime(pickedDate);
+      });
+    }
+  }
+
   _registerValidate(){
     List<String> inputValue = [];
     List<String> checkValue = [];
@@ -486,6 +585,7 @@ class RegisterPageState extends State<RegisterPage> {
     inputValue.add(_confirmPasswordController.text.toString());
     inputValue.add(_firstNameController.text.toString());
     inputValue.add(_lasttNameController.text.toString());
+    inputValue.add(birthDate);
     inputValue.add(_telephoneController.text.toString());
     for(int i = 0;i < listValue.length;i++){
       if(inputValue[i] == ""){
@@ -506,7 +606,7 @@ class RegisterPageState extends State<RegisterPage> {
         _showDialog("Password และ Confirm password ไม่ตรงกัน");
       } else {
         _register(inputValue[0], inputValue[1], '${inputValue[3]}  ${inputValue[4]}',
-            "", inputValue[5], "");
+            inputValue[5], inputValue[6], "");
       }
     }
   }
@@ -555,5 +655,20 @@ class RegisterPageState extends State<RegisterPage> {
     setState(() {
       showConfirmPassword = _isShow;
     });
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    var formetter = DateFormat('yyyy-MM-dd');
+    return formetter.format(dateTime);
+  }
+
+  String _formatDateTimetoString(DateTime dateTime) {
+    var formetter = DateFormat('dd MMMM yyyy', "th");
+    List<String> strDate = formetter.format(dateTime).split(" ");
+    if(strDate[0][0] == '0'){
+      strDate[0] = strDate[0][1];
+    }
+    int year = int.parse(strDate[2]) + 543;
+    return "${strDate[0]} ${strDate[1]} ${year.toString()}";
   }
 }

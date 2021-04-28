@@ -10,9 +10,18 @@ class LocationStampPageState extends State<LocationStampPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
 
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.lightBlue,
       ),
     );
   }
