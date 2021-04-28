@@ -168,9 +168,9 @@ class MainAppPageState extends State<MainAppPage> {
                 ),
               ),
               CustomView().buttonCustomTextIcon(Icons.person, "โปรไฟล์",
-                  shortWidthsize / 30, _nextProfilePage),
+                  shortTestside / 30, _nextProfilePage),
               CustomView().buttonCustomTextIcon(Icons.logout, "ออกจากระบบ",
-                  shortWidthsize / 30, _dialogLogOut),
+                  shortTestside / 30, _dialogLogOut),
             ],
           ),
         )
