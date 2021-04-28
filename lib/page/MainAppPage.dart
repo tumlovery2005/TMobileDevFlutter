@@ -64,6 +64,14 @@ class MainAppPageState extends State<MainAppPage> {
   }
 
   Widget _isPortrait(){
+    if(shortTestside < 600){
+      return _isPortraitPhone();
+    } else {
+      return _isPortraitTablet();
+    }
+  }
+
+  Widget _isPortraitPhone(){
     return Scaffold(
       appBar: AppBar(
         elevation: 3.0,
@@ -73,12 +81,44 @@ class MainAppPageState extends State<MainAppPage> {
         centerTitle: true,
         backgroundColor: Colors.lightBlue,
       ),
-      drawer: _DrawerLayout(),
+      drawer: _DrawerLayout(shortTestside / 6),
       body: IndexedStack(
         index: bottomSelectedIndex,
         children: [..._pageList],
       ),
       bottomNavigationBar: _buildNavigationBar(),
+    );
+  }
+
+  Widget _isPortraitTablet(){
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          child: Row(
+            children: <Widget>[
+              _DrawerLayout(shortTestside / 8),
+              Expanded(
+                child: Scaffold(
+                  appBar: AppBar(
+                    elevation: 3.0,
+                    title: Text('', style: TextStyle(color: Colors.white,
+                        fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                    ),
+                    centerTitle: true,
+                    backgroundColor: Colors.lightBlue,
+                  ),
+                  body: IndexedStack(
+                    index: bottomSelectedIndex,
+                    children: [..._pageList],
+                  ),
+                  bottomNavigationBar: _buildNavigationBar(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -89,8 +129,8 @@ class MainAppPageState extends State<MainAppPage> {
         child: Row(
           children: <Widget>[
             Container(
-              width: (shortWidthsize / 10) * 4,
-              child: _DrawerLayout(),
+              width: (shortWidthsize / 10) * 3,
+              child: _DrawerLayout(shortTestside / 6),
             ),
             Expanded(
               child: Scaffold(
@@ -107,16 +147,24 @@ class MainAppPageState extends State<MainAppPage> {
     );
   }
 
-  Widget _DrawerLayout(){
+  Widget _DrawerLayout(double width){
     return Drawer(
         child: Container(
           width: double.infinity,
           child: ListView(
             children: <Widget>[
-              DrawerHeader(
-                child: getDrawerHeader(),
+              Container(
+                padding: EdgeInsets.all(shortWidthsize / 50),
+                child: getDrawerHeader(width),
                 decoration: BoxDecoration(
-                  color: Colors.lightBlue,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.lightBlue,
+                      Colors.green,
+                    ],
+                  ),
                 ),
               ),
               CustomView().buttonCustomTextIcon(Icons.person, "โปรไฟล์",
@@ -129,22 +177,14 @@ class MainAppPageState extends State<MainAppPage> {
     );
   }
 
-  Widget getDrawerHeader(){
+  Widget getDrawerHeader(double width){
     return Container(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              getIconProfile(userMe.checkin_user_photo),
-              Expanded(
-                child: _textName(userMe.checkin_user_name),
-              ),
-            ],
-          ),
-          getWidgetText('เบอร์โทรศัพท์ : ', userMe.checkin_user_telephone, Colors.white),
+          getIconProfile(userMe.checkin_user_photo, width),
+          getWidgetText('', userMe.checkin_user_name, Colors.white),
           getWidgetText('อีเมล : ', userMe.checkin_user_email, Colors.white),
         ],
       ),
@@ -164,20 +204,20 @@ class MainAppPageState extends State<MainAppPage> {
     );
   }
 
-  Widget getIconProfile(String photo) {
+  Widget getIconProfile(String photo, double width) {
     return Container(
-      width: shortTestside / 6,
-      height: shortTestside / 6,
+      width: width,
+      height: width,
       child: ClipRRect(
         borderRadius: new BorderRadius.circular(100),
         child: Container(
           color: Colors.grey,
           child: photo != "" ? CachedNetworkImage(
             imageUrl: photo,
-            placeholder: (context, url) => ImageProfileFailUtils().imageFail(shortTestside / 6),
-            errorWidget: (context, url, error) => ImageProfileFailUtils().imageFail(shortTestside / 6),
+            placeholder: (context, url) => ImageProfileFailUtils().imageFail(width),
+            errorWidget: (context, url, error) => ImageProfileFailUtils().imageFail(width),
             fit: BoxFit.cover,
-          ) : ImageProfileFailUtils().imageFail(shortTestside / 6),
+          ) : ImageProfileFailUtils().imageFail(width),
         ),
       ),
     );
@@ -196,17 +236,11 @@ class MainAppPageState extends State<MainAppPage> {
     );
   }
 
-  Widget getWidgetTextName(){
-    if(userMe.checkin_user_name != null){
-      return _textName(userMe.checkin_user_name);
-    } else {
-      return _textName("Firstname Lastname");
-    }
-  }
-
   Widget getWidgetText(String title, String value, Color color){
     return Container(
+      margin: EdgeInsets.only(top: shortTestside / 50),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _text(title, color),
           Expanded(child: _text(value, color)),
@@ -215,27 +249,15 @@ class MainAppPageState extends State<MainAppPage> {
     );
   }
 
-  Widget _textName(String name){
-    return Container(
-      margin: EdgeInsets.all(shortTestside / 50),
-      child: Text(name, style: TextStyle(fontSize: shortTestside / 20,
-          color: Colors.white,
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-
   Widget _text(String value, Color color){
     return Container(
-      margin: EdgeInsets.only(
-        top: shortTestside / 25,
-      ),
+      alignment: Alignment.topLeft,
       child: Text(value,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: color)
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: color,
+        ),
       ),
     );
   }

@@ -19,7 +19,12 @@ class CustomView {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Icon(icon),
-              Text(strButton, style: TextStyle(color: Colors.white)),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: margin),
+                  child: Text(strButton, style: TextStyle(color: Colors.white)),
+                ),
+              ),
             ],
           ),
         ),
