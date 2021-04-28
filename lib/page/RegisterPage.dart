@@ -54,65 +54,81 @@ class RegisterPageState extends State<RegisterPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back_outlined),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          elevation: 3.0,
-          backgroundColor: Colors.lightBlue,
-        ),
-        body: ModalProgressHUD(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            padding: EdgeInsets.only(
-              top: shortTestside / 100,
-              bottom: shortTestside / 100,
-              left: shortTestside / 10,
-              right: shortTestside / 10,
-            ),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.lightBlue,
-                  Colors.green,
-                ],
+        body: Stack(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.lightBlue,
+                    Colors.green,
+                  ],
+                ),
               ),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Center(
-                    child: Image(
-                      image: AssetImage('assets/title_image.png'),
-                      width: shortWidthsize / 2, color: Colors.white,
+            ModalProgressHUD(
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                padding: EdgeInsets.only(
+                  top: shortWidthsize / 5,
+                  bottom: shortTestside / 100,
+                  left: shortTestside / 10,
+                  right: shortTestside / 10,
+                ),
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Center(
+                          child: Image(
+                            image: AssetImage('assets/title_image.png'),
+                            width: shortWidthsize / 2, color: Colors.white,
+                          ),
+                        ),
+                        Text('TmobileDev', style: TextStyle(color: Colors.white,
+                            fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: shortWidthsize / 10),
+                          child: Text('Register', style: TextStyle(color: Colors.white,
+                              fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                          ),
+                        ),
+                        _boxInputEmail(),
+                        _boxInputPassword(),
+                        _boxInputConfirmPassword(),
+                        _boxInputFirstname(),
+                        _boxInputLastname(),
+                        _boxTelephone(),
+                        _boxBirthdate(),
+                        _buttonRegister(),
+                      ],
                     ),
                   ),
-                  Text('TmobileDev', style: TextStyle(color: Colors.white,
-                      fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: shortWidthsize / 10),
-                    child: Text('Register', style: TextStyle(color: Colors.white,
-                        fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
-                    ),
-                  ),
-                  _boxInputEmail(),
-                  _boxInputPassword(),
-                  _boxInputConfirmPassword(),
-                  _boxInputFirstname(),
-                  _boxInputLastname(),
-                  _boxTelephone(),
-                  _boxBirthdate(),
-                  _buttonRegister(),
-                ],
+                ),
+              ),
+              inAsyncCall: loading,
+            ),
+            Container(
+              width: double.infinity,
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.only(top: shortWidthsize / 20),
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.white,
+                  size: shortWidthsize / 13,
+                ),
+                onPressed: () => {
+                  Navigator.pop(context),
+                },
               ),
             ),
-          ),
-          inAsyncCall: loading,
+          ],
         ),
       ),
     );
@@ -120,14 +136,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _isLandscape(){
     return Scaffold(
-      appBar: AppBar(
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back_outlined),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        elevation: 3.0,
-        backgroundColor: Colors.lightBlue,
-      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -141,28 +149,47 @@ class RegisterPageState extends State<RegisterPage> {
             ],
           ),
         ),
-        child: Row(
+        child: Stack(
           children: <Widget>[
-            Container(
-              width: (shortWidthsize / 2),
-              height: double.infinity,
-              child: Column(
-                mainAxisAlignment:  MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Image(
-                      image: AssetImage('assets/title_image.png'),
-                      width: shortWidthsize / 4, color: Colors.white,
-                    ),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: (shortWidthsize / 2),
+                  height: double.infinity,
+                  child: Column(
+                    mainAxisAlignment:  MainAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                        child: Image(
+                          image: AssetImage('assets/title_image.png'),
+                          width: shortWidthsize / 4, color: Colors.white,
+                        ),
+                      ),
+                      Text('TmobileDev', style: TextStyle(color: Colors.white,
+                          fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
+                      ),
+                    ],
                   ),
-                  Text('TmobileDev', style: TextStyle(color: Colors.white,
-                      fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
-                  ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: _layoutRegister(),
+                ),
+              ],
             ),
-            Expanded(
-              child: _layoutLogin(),
+            Container(
+              width: double.infinity,
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.only(top: shortWidthsize / 40),
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.white,
+                  size: shortWidthsize / 25,
+                ),
+                onPressed: () => {
+                  Navigator.pop(context),
+                },
+              ),
             ),
           ],
         ),
@@ -170,7 +197,7 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _layoutLogin(){
+  Widget _layoutRegister(){
     return Container(
       child: Center(
         child: SingleChildScrollView(
