@@ -1,11 +1,18 @@
+import 'dart:convert';
+
+import 'package:action_broadcast/action_broadcast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tmobiledev/bloc/RegisterBloc.dart';
 import 'package:tmobiledev/bloc/UpdateProfileBloc.dart';
+import 'package:tmobiledev/bloc/UserMeBloc.dart';
 import 'package:tmobiledev/model/StatusModel.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
+import 'package:tmobiledev/model/user/UserStatusModel.dart';
+import 'package:tmobiledev/page/MainAppPage.dart';
+import 'package:tmobiledev/page/profile/ProfilePage.dart';
 import 'package:tmobiledev/utils/DateTimeUtils.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
@@ -511,13 +518,35 @@ class ProfileEditPageState extends State<ProfileEditPage> {
     updateProfile.then((value) => {
       if(value.error == ""){
         if(value.status){
-          functionClose(context),
-          _showDialog(value.messge),
+          _getUserMe(authen, value.messge),
         } else {
           _showDialog(value.messge),
         }
       } else {
         _showDialog(value.error)
+      },
+      _setLoading(false),
+    });
+  }
+
+  _getUserMe(String authen, String message){
+    _setLoading(true);
+    Future<UserStatusModel> userme = userMeBloc.getUserMe(authen);
+    userme.then((value) => {
+      if(value.error == ""){
+        print("data ${value.data}"),
+        if(value.status){
+          sendBroadcast(ProfilePage.KEY_UPDATE_PROFILE),
+          sendBroadcast(MainAppPage.KEY_MAIN_UPDATE_PROFILE),
+          _saveUserme(jsonEncode(value.data.toJson())),
+          functionClose(context),
+          _showDialog(value.messge),
+        } else {
+
+        }
+      } else {
+        print('userme error : ${value.error}'),
+
       },
       _setLoading(false),
     });
@@ -529,16 +558,8 @@ class ProfileEditPageState extends State<ProfileEditPage> {
     });
   }
 
-  _setShowPassword(bool _isShow){
-    setState(() {
-      showPassword = _isShow;
-    });
-  }
-
-  _setShowConfirmPassword(bool _isShow){
-    setState(() {
-      showConfirmPassword = _isShow;
-    });
+  _saveUserme(String usermeJson){
+    Prefs.setString(Prefs.PREF_USER_ME, usermeJson);
   }
 
   String _formatDateTime(DateTime dateTime) {

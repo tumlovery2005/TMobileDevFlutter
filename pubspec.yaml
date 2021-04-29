@@ -35,6 +35,7 @@ dependencies:
   keyboard_dismisser: ^2.0.0
   dio: ^4.0.0
   rxdart: ^0.26.0
+  action_broadcast: ^3.0.0
   firebase_messaging: ^9.1.0
   firebase_core: ^1.0.2
   flutter_local_notifications: ^5.0.0

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:action_broadcast/action_broadcast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -12,6 +15,7 @@ import 'package:tmobiledev/utils/StringUtils.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
 
 class ProfilePage extends StatefulWidget {
+  static const String KEY_UPDATE_PROFILE = "KEY_UPDATE_PROFILE";
 
   @override
   ProfilePageState createState() => ProfilePageState();
@@ -22,12 +26,16 @@ class ProfilePageState extends State<ProfilePage> {
   double showOpacity = 0.0;
   bool loading = false;
 
+  StreamSubscription updateProfileReceiver;
   UserModel userModel = new UserModel();
 
   @override
   void initState() {
     Prefs.load();
     _getUserMe(Prefs.getString(Prefs.PREF_AUTHEN));
+    updateProfileReceiver = registerReceiver([ProfilePage.KEY_UPDATE_PROFILE]).listen((event) {
+      _getUserMe(Prefs.getString(Prefs.PREF_AUTHEN));
+    });
     super.initState();
   }
 
@@ -329,5 +337,11 @@ class ProfilePageState extends State<ProfilePage> {
     setState(() {
       showOpacity = _showOpacity;
     });
+  }
+
+  @override
+  void dispose(){
+    updateProfileReceiver.cancel();
+    super.dispose();
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:action_broadcast/action_broadcast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_alert_dialog/platform_alert_dialog.dart';
@@ -22,6 +23,7 @@ import 'TestColorsPage.dart';
 import 'TokenPage.dart';
 
 class MainAppPage extends StatefulWidget {
+  static const String KEY_MAIN_UPDATE_PROFILE = "KEY_MAIN_UPDATE_PROFILE";
 
   @override
   MainAppPageState createState() => MainAppPageState();
@@ -31,12 +33,17 @@ class MainAppPageState extends State<MainAppPage> {
   double shortTestside;
   double shortWidthsize;
   int bottomSelectedIndex = 0;
+
+  StreamSubscription mainUpdateProfileReceiver;
   UserModel userMe = null;
 
   @override
   void initState() {
     Prefs.load();
     _getUserMe();
+    mainUpdateProfileReceiver = registerReceiver([MainAppPage.KEY_MAIN_UPDATE_PROFILE]).listen((event) {
+      _getUserMe();
+    });
     super.initState();
   }
 
@@ -322,5 +329,11 @@ class MainAppPageState extends State<MainAppPage> {
     setState(() {
       bottomSelectedIndex = index;
     });
+  }
+
+  @override
+  void dispose(){
+    mainUpdateProfileReceiver.cancel();
+    super.dispose();
   }
 }
