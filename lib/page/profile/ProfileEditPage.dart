@@ -542,11 +542,13 @@ class ProfileEditPageState extends State<ProfileEditPage> {
           functionClose(context),
           _showDialog(value.messge),
         } else {
-
+          functionClose(context),
+          _showDialog(value.messge),
         }
       } else {
         print('userme error : ${value.error}'),
-
+        functionClose(context),
+        _showDialog(value.messge),
       },
       _setLoading(false),
     });
