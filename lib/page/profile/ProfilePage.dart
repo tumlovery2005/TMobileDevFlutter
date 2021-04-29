@@ -193,7 +193,7 @@ class ProfilePageState extends State<ProfilePage> {
   Widget _ButtonEditProfile(){
     return FloatingActionButton.extended(
       onPressed: () {
-        Navigator.push(context, EnterExitRoute(enterPage: ProfileEditPage()));
+        Navigator.push(context, EnterExitRoute(enterPage: ProfileEditPage(userModel: userModel)));
       },
       label: Text('แก้ไขโปรไฟล์', style: TextStyle(fontSize: textSize,
           fontWeight: FontWeight.bold)),

@@ -5,11 +5,12 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tmobiledev/bloc/RegisterBloc.dart';
 import 'package:tmobiledev/model/StatusModel.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
+import 'package:tmobiledev/utils/DateTimeUtils.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
 
 class ProfileEditPage extends StatefulWidget {
   UserModel userModel;
-
+  ProfileEditPage({Key key, this.userModel}) : super(key: key);
 
   @override
   ProfileEditPageState createState() => ProfileEditPageState();
@@ -17,9 +18,6 @@ class ProfileEditPage extends StatefulWidget {
 
 class ProfileEditPageState extends State<ProfileEditPage> {
   double shortTestside, shortWidthsize;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lasttNameController = TextEditingController();
   final _telephoneController = TextEditingController();
@@ -31,8 +29,19 @@ class ProfileEditPageState extends State<ProfileEditPage> {
   String showBirthDate = "";
 
   List<String> listValue = [
-    "อีเมล์", "รหัสผ่าน", "ยืนยันรหัสผ่าน", "ชื่อจริง", "นามสกุล", "วันเดือนปีเกิด", "เบอร์โทรศัพท์"
+    "ชื่อจริง", "นามสกุล", "วันเดือนปีเกิด", "เบอร์โทรศัพท์"
   ];
+
+  @override
+  void initState() {
+    String name = widget.userModel.checkin_user_name;
+    birthDate = widget.userModel.checkin_user_birth_date;
+    _firstNameController.text = name.split("  ")[0];
+    _lasttNameController.text = name.split("  ")[1];
+    _telephoneController.text = widget.userModel.checkin_user_telephone;
+    _textBirthdateController.text = DateTimeUtils().getDateString(birthDate);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +108,6 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                               fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
                           ),
                         ),
-                        _boxInputEmail(),
-                        _boxInputPassword(),
-                        _boxInputConfirmPassword(),
                         _boxInputFirstname(),
                         _boxInputLastname(),
                         _boxTelephone(),
@@ -212,9 +218,6 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                 Text('แก้ไขโปรไฟล์', style: TextStyle(color: Colors.white,
                     fontSize: shortTestside / 15, fontWeight: FontWeight.bold)
                 ),
-                _boxInputEmail(),
-                _boxInputPassword(),
-                _boxInputConfirmPassword(),
                 _boxInputFirstname(),
                 _boxInputLastname(),
                 _boxTelephone(),
@@ -225,150 +228,6 @@ class ProfileEditPageState extends State<ProfileEditPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _boxInputEmail(){
-    return Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(top: shortTestside /10),
-        child: Card(
-            shadowColor: Colors.lightBlue,
-            elevation: 3.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusDirectional.circular(shortTestside / 10)),
-            child: Container(
-              padding: EdgeInsets.all(shortTestside / 100),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(shortTestside / 100),
-                    child: Icon(Icons.email, color: Colors.lightBlue),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(left: shortTestside / 100),
-                      child: TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          hintText: "E-mail",
-                          border: InputBorder.none,
-                        ),
-                        maxLines: 1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-        )
-    );
-  }
-
-  Widget _boxInputPassword(){
-    return Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(top: shortTestside / 100),
-        child: Card(
-            shadowColor: Colors.lightBlue,
-            elevation: 3.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusDirectional.circular(shortTestside / 10)),
-            child: Container(
-              padding: EdgeInsets.all(shortTestside / 100),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(shortTestside / 100),
-                    child: Icon(Icons.vpn_key, color: Colors.lightBlue),
-                  ),
-                  Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: shortTestside / 100),
-                        child: TextField(
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                            hintText: "Password",
-                            border: InputBorder.none,
-                          ),
-                          enableSuggestions: false,
-                          obscureText: showPassword,
-                          maxLines: 1,
-                        ),
-                      )
-                  ),
-                  InkResponse(
-                    child: Container(
-                      margin: EdgeInsets.all(shortTestside / 100),
-                      child: _iconShowPassword(),
-                    ),
-                    onTap: () => {
-                      if(showPassword){
-                        _setShowPassword(false),
-                      } else {
-                        _setShowPassword(true),
-                      }
-                    },
-                  ),
-                ],
-              ),
-            )
-        )
-    );
-  }
-
-  Widget _boxInputConfirmPassword(){
-    return Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(top: shortTestside / 100),
-        child: Card(
-            shadowColor: Colors.lightBlue,
-            elevation: 3.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusDirectional.circular(shortTestside / 10)),
-            child: Container(
-              padding: EdgeInsets.all(shortTestside / 100),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(shortTestside / 100),
-                    child: Icon(Icons.vpn_key, color: Colors.lightBlue),
-                  ),
-                  Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: shortTestside / 100),
-                        child: TextField(
-                          controller: _confirmPasswordController,
-                          decoration: InputDecoration(
-                            hintText: "Confirm password",
-                            border: InputBorder.none,
-                          ),
-                          enableSuggestions: false,
-                          obscureText: showConfirmPassword,
-                          maxLines: 1,
-                        ),
-                      )
-                  ),
-                  InkResponse(
-                    child: Container(
-                      margin: EdgeInsets.all(shortTestside / 100),
-                      child: _iconShowPassword(),
-                    ),
-                    onTap: () => {
-                      if(showConfirmPassword){
-                        _setShowConfirmPassword(false),
-                      } else {
-                        _setShowConfirmPassword(true),
-                      }
-                    },
-                  ),
-                ],
-              ),
-            )
-        )
     );
   }
 
@@ -608,9 +467,6 @@ class ProfileEditPageState extends State<ProfileEditPage> {
   _registerValidate(){
     List<String> inputValue = [];
     List<String> checkValue = [];
-    inputValue.add(_emailController.text.toString());
-    inputValue.add(_passwordController.text.toString());
-    inputValue.add(_confirmPasswordController.text.toString());
     inputValue.add(_firstNameController.text.toString());
     inputValue.add(_lasttNameController.text.toString());
     inputValue.add(birthDate);
