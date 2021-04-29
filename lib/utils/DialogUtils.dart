@@ -3,8 +3,6 @@ import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 
 class DialogUtils {
 
-
-
   showDialogMessage(BuildContext context, String title, String message){
     showDialog<void>(
       context: context,
