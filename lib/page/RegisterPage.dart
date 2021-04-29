@@ -75,7 +75,7 @@ class RegisterPageState extends State<RegisterPage> {
                 height: double.infinity,
                 padding: EdgeInsets.only(
                   top: shortWidthsize / 5,
-                  bottom: shortTestside / 100,
+                  bottom: shortTestside / 10,
                   left: shortTestside / 10,
                   right: shortTestside / 10,
                 ),

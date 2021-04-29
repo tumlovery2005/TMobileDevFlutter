@@ -6,7 +6,7 @@ import 'package:platform_alert_dialog/platform_alert_dialog.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
 import 'package:tmobiledev/page/LocationStampPage.dart';
 import 'package:tmobiledev/page/LoginPage.dart';
-import 'package:tmobiledev/page/ProfilePage.dart';
+import 'package:tmobiledev/page/profile/ProfilePage.dart';
 import 'package:tmobiledev/utils/CustomView.dart';
 import 'package:tmobiledev/utils/DateTimeUtils.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
