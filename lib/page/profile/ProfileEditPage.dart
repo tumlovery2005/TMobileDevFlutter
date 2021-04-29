@@ -437,7 +437,7 @@ class ProfileEditPageState extends State<ProfileEditPage> {
           // _setLoading(true),
           _registerValidate(),
         },
-        child: Text('SAVE', style: TextStyle(color: Colors.white)),
+        child: Text('บันทึก', style: TextStyle(color: Colors.white)),
         clipBehavior: Clip.antiAlias,
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.lightBlue)

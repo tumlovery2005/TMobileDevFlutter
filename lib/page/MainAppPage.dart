@@ -8,6 +8,7 @@ import 'package:tmobiledev/model/user/UserModel.dart';
 import 'package:tmobiledev/page/LocationStampPage.dart';
 import 'package:tmobiledev/page/LoginPage.dart';
 import 'package:tmobiledev/page/profile/ProfilePage.dart';
+import 'package:tmobiledev/page/setting/ChangePasswordSettingPage.dart';
 import 'package:tmobiledev/utils/CustomView.dart';
 import 'package:tmobiledev/utils/DateTimeUtils.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
@@ -176,8 +177,8 @@ class MainAppPageState extends State<MainAppPage> {
               ),
               CustomView().buttonCustomTextIcon(Icons.person, "โปรไฟล์",
                   shortTestside / 30, _nextProfilePage),
-              CustomView().buttonCustomTextIcon(Icons.settings, "ตั้งค่า",
-                  shortTestside / 30, _nextProfilePage),
+              CustomView().buttonCustomTextIcon(Icons.vpn_key, "เปลี่ยนรหัสผ่าน",
+                  shortTestside / 30, _nextChangePasswordSettingPage),
               CustomView().buttonCustomTextIcon(Icons.logout, "ออกจากระบบ",
                   shortTestside / 30, _dialogLogOut),
             ],
@@ -308,6 +309,10 @@ class MainAppPageState extends State<MainAppPage> {
 
   _dialogLogOut(){
     DialogUtils().showDialogYesNo(context, 'คำเตือน', 'คุณต้องการออกจากระบบหรือไม่', _LogOut);
+  }
+
+  _nextChangePasswordSettingPage(){
+    Navigator.push(context, EnterExitRoute(enterPage: ChangePasswordSettingPage()));
   }
 
   _nextProfilePage(){
