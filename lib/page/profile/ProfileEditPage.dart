@@ -3,10 +3,12 @@ import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tmobiledev/bloc/RegisterBloc.dart';
+import 'package:tmobiledev/bloc/UpdateProfileBloc.dart';
 import 'package:tmobiledev/model/StatusModel.dart';
 import 'package:tmobiledev/model/user/UserModel.dart';
 import 'package:tmobiledev/utils/DateTimeUtils.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
+import 'package:tmobiledev/utils/pref_manager.dart';
 
 class ProfileEditPage extends StatefulWidget {
   UserModel userModel;
@@ -34,6 +36,7 @@ class ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   void initState() {
+    Prefs.load();
     String name = widget.userModel.checkin_user_name;
     birthDate = widget.userModel.checkin_user_birth_date;
     _firstNameController.text = name.split("  ")[0];
@@ -486,12 +489,8 @@ class ProfileEditPageState extends State<ProfileEditPage> {
     if(checkValue.length > 0){
       _showDialog(message);
     } else {
-      if(inputValue[1] != inputValue[2]){
-        _showDialog("Password และ Confirm password ไม่ตรงกัน");
-      } else {
-        _register(inputValue[0], inputValue[1], '${inputValue[3]}  ${inputValue[4]}',
-            inputValue[5], inputValue[6], "");
-      }
+      _updateProfile(widget.userModel.checkin_user_email, '${inputValue[0]}  ${inputValue[1]}',
+          inputValue[2], inputValue[3], "");
     }
   }
 
@@ -503,12 +502,13 @@ class ProfileEditPageState extends State<ProfileEditPage> {
     Navigator.pop(context);
   }
 
-  _register(String email, String password, String name, String birth_date,
-      String telephone, String address){
+  _updateProfile(String email, String name, String birth_date, String telephone,
+      String address){
     _setLoading(true);
-    Future<StatusModel> register = registerBloc.register(email, password, name,
-        birth_date, telephone, address);
-    register.then((value) => {
+    String authen = Prefs.getString(Prefs.PREF_AUTHEN);
+    Future<StatusModel> updateProfile = updateProfileBloc.updateProfile(authen,
+        email, name, birth_date, telephone, address);
+    updateProfile.then((value) => {
       if(value.error == ""){
         if(value.status){
           functionClose(context),

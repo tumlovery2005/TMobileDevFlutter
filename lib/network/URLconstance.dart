@@ -5,4 +5,5 @@ class URLconstance {
   static const String CHECK_IN_LOGIN = BaseURL + "user/login";
   static const String CHECK_IN_REGISTER = BaseURL + "user/register";
   static const String CHECK_IN_USER_ME = BaseURL + "user/me";
+  static const String CHECK_IN_USER_UPDATE = BaseURL + "user/update";
 }
