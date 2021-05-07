@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:tmobiledev/bloc/ChangePasswordBloc.dart';
+import 'package:tmobiledev/model/StatusModel.dart';
+import 'package:tmobiledev/model/user/UserStatusModel.dart';
 import 'package:tmobiledev/utils/DialogUtils.dart';
+import 'package:tmobiledev/utils/pref_manager.dart';
 
 class ChangePasswordSettingPage extends StatefulWidget {
 
@@ -10,6 +16,7 @@ class ChangePasswordSettingPage extends StatefulWidget {
 
 class ChangePasswordSettingPageState extends State<ChangePasswordSettingPage> {
   double shortTestside, shortWidthsize;
+  final _oldPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool showPassword = true;
@@ -19,8 +26,14 @@ class ChangePasswordSettingPageState extends State<ChangePasswordSettingPage> {
   String showBirthDate = "";
 
   List<String> listValue = [
-    "อีเมล์", "รหัสผ่าน", "ยืนยันรหัสผ่าน", "ชื่อจริง", "นามสกุล", "วันเดือนปีเกิด", "เบอร์โทรศัพท์"
+    "รหัสผ่านเดิม", "รหัสผ่านใหม่", "ยืนยันรหัสผ่านใหม่"
   ];
+
+  @override
+  void initState() {
+    Prefs.load();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +243,7 @@ class ChangePasswordSettingPageState extends State<ChangePasswordSettingPage> {
                       child: Container(
                         margin: EdgeInsets.only(left: shortTestside / 100),
                         child: TextField(
-                          controller: _confirmPasswordController,
+                          controller: _oldPasswordController,
                           decoration: InputDecoration(
                             hintText: "รหัสผ่านเดิม",
                             border: InputBorder.none,
@@ -396,6 +409,7 @@ class ChangePasswordSettingPageState extends State<ChangePasswordSettingPage> {
   _registerValidate(){
     List<String> inputValue = [];
     List<String> checkValue = [];
+    inputValue.add(_oldPasswordController.text.toString());
     inputValue.add(_passwordController.text.toString());
     inputValue.add(_confirmPasswordController.text.toString());
     inputValue.add(birthDate);
@@ -417,8 +431,8 @@ class ChangePasswordSettingPageState extends State<ChangePasswordSettingPage> {
       if(inputValue[1] != inputValue[2]){
         _showDialog("Password และ Confirm password ไม่ตรงกัน");
       } else {
-        _register(inputValue[0], inputValue[1], '${inputValue[3]}  ${inputValue[4]}',
-            inputValue[5], inputValue[6], "");
+        _changePassword(_oldPasswordController.text.toString(),
+            _passwordController.text.toString());
       }
     }
   }
@@ -431,24 +445,25 @@ class ChangePasswordSettingPageState extends State<ChangePasswordSettingPage> {
     Navigator.pop(context);
   }
 
-  _register(String email, String password, String name, String birth_date,
-      String telephone, String address){
-    // _setLoading(true);
-    // Future<StatusModel> register = registerBloc.register(email, password, name,
-    //     birth_date, telephone, address);
-    // register.then((value) => {
-    //   if(value.error == ""){
-    //     if(value.status){
-    //       functionClose(context),
-    //       _showDialog(value.messge),
-    //     } else {
-    //       _showDialog(value.messge),
-    //     }
-    //   } else {
-    //     _showDialog(value.error)
-    //   },
-    //   _setLoading(false),
-    // });
+  _changePassword(String password_old, String password_new){
+    _setLoading(true);
+    String authen = Prefs.getString(Prefs.PREF_AUTHEN);
+    Future<UserStatusModel> register = changePasswordBloc.changePassword(authen,
+        password_old, password_new);
+    register.then((value) => {
+      if(value.error == ""){
+        if(value.status){
+          _saveAuthen(value.data.checkin_user_email, password_new),
+          functionClose(context),
+          _showDialog(value.messge),
+        } else {
+          _showDialog(value.messge),
+        }
+      } else {
+        _showDialog(value.error)
+      },
+      _setLoading(false),
+    });
   }
 
   _setLoading(bool _loading){
@@ -467,6 +482,11 @@ class ChangePasswordSettingPageState extends State<ChangePasswordSettingPage> {
     setState(() {
       showConfirmPassword = _isShow;
     });
+  }
+
+  _saveAuthen(String email, String password){
+    String authen = 'Basic ' + base64Encode(utf8.encode('${email}:${password}'));
+    Prefs.setString(Prefs.PREF_AUTHEN, authen);
   }
 
 }

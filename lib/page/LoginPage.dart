@@ -8,6 +8,7 @@ import 'package:tmobiledev/model/StatusModel.dart';
 import 'package:tmobiledev/model/user/UserStatusModel.dart';
 import 'package:tmobiledev/page/MainAppPage.dart';
 import 'package:tmobiledev/page/RegisterPage.dart';
+import 'package:tmobiledev/utils/DialogUtils.dart';
 import 'package:tmobiledev/utils/EnterExitRoute.dart';
 import 'package:tmobiledev/utils/pref_manager.dart';
 
@@ -24,6 +25,10 @@ class LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool showPassword = true;
   bool loading = false;
+
+  List<String> listValue = [
+    "อีเมล์", "รหัสผ่าน"
+  ];
 
   @override
   void initState() {
@@ -293,7 +298,7 @@ class LoginPageState extends State<LoginPage> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () => {
-          _nextRegisterPage(),
+          _validateLogin(),
         },
         child: Text('Register', style: TextStyle(color: Colors.white)),
         clipBehavior: Clip.antiAlias,
@@ -304,9 +309,21 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  _LoginRequest(){
+  _validateLogin(){
     String email = _emailController.text.toString().trim();
     String password = _passwordController.text.toString().trim();
+    List<String> inputValue = [];
+    List<String> checkValue = [];
+    inputValue.add(email);
+    inputValue.add(password);
+    if(!email.isEmpty && !password.isEmpty){
+      _LoginRequest(email, password);
+    } else {
+      DialogUtils().showDialogMessage(context, "คำเตือน", "กรุณากรอกข้อมูลให้ครบทุกช่อง");
+    }
+  }
+
+  _LoginRequest(String email, String password){
     Future<StatusModel> login = loginBloc.login(email, password);
     String authen = 'Basic ' + base64Encode(utf8.encode('${email}:${password}'));
     login.then((value) => {
@@ -342,8 +359,8 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-  _saveAuthen(String email){
-    Prefs.setString(Prefs.PREF_AUTHEN, email);
+  _saveAuthen(String authen){
+    Prefs.setString(Prefs.PREF_AUTHEN, authen);
   }
 
   _saveUserme(String usermeJson){
