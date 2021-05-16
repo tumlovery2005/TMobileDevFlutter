@@ -320,6 +320,7 @@ class LoginPageState extends State<LoginPage> {
       _LoginRequest(email, password);
     } else {
       DialogUtils().showDialogMessage(context, "คำเตือน", "กรุณากรอกข้อมูลให้ครบทุกช่อง");
+      _setLoading(false);
     }
   }
 
@@ -333,12 +334,13 @@ class LoginPageState extends State<LoginPage> {
           _getUserMe(authen),
         } else {
           print('error model : ${value.messge}'),
-          _setLoading(false),
+          DialogUtils().showDialogMessage(context, 'คำเตือน', value.messge),
         }
       } else {
         print('error model : ${value.error}'),
-        _setLoading(false),
+        DialogUtils().showDialogMessage(context, 'คำเตือน', value.error),
       },
+      _setLoading(false),
     });
   }
 
@@ -350,11 +352,10 @@ class LoginPageState extends State<LoginPage> {
           _saveUserme(jsonEncode(value.data.toJson())),
           _nextMainAppPage(),
         } else {
-
-          print('error status message : ${value.messge}')
+          DialogUtils().showDialogMessage(context, 'คำเตือน', value.messge),
         }
       } else {
-        print('userme error : ${value.error}'),
+        DialogUtils().showDialogMessage(context, 'คำเตือน', value.error),
       },
       _setLoading(false),
     });
