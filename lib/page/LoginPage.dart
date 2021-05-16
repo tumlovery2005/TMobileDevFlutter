@@ -281,7 +281,7 @@ class LoginPageState extends State<LoginPage> {
       child: ElevatedButton(
         onPressed: () => {
           _setLoading(true),
-          _LoginRequest(),
+          _validateLogin(),
         },
         child: Text('Login', style: TextStyle(color: Colors.white)),
         clipBehavior: Clip.antiAlias,
@@ -298,7 +298,7 @@ class LoginPageState extends State<LoginPage> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () => {
-          _validateLogin(),
+          _nextRegisterPage(),
         },
         child: Text('Register', style: TextStyle(color: Colors.white)),
         clipBehavior: Clip.antiAlias,
@@ -350,6 +350,7 @@ class LoginPageState extends State<LoginPage> {
           _saveUserme(jsonEncode(value.data.toJson())),
           _nextMainAppPage(),
         } else {
+
           print('error status message : ${value.messge}')
         }
       } else {
